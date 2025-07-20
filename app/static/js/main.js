@@ -1,4 +1,5 @@
 const textInput = document.getElementById('text-input');
+const urlInput = document.getElementById('url-input');
 const colormapSelect = document.getElementById('colormap-select');
 const backgroundColorInput = document.getElementById('background-color-input');
 const fontFileInput = document.getElementById('font-file-input');
@@ -7,13 +8,19 @@ const maskFileInput = document.getElementById('mask-file-input');
 
 function generateWordCloud() {
     const text = textInput.value;
-    if (text.trim() === '') {
+    const url = urlInput.value;
+
+    if (text.trim() === '' && url.trim() === '') {
         document.getElementById('wordcloud-container').innerHTML = '';
         return;
     }
 
     const formData = new FormData();
-    formData.append('text', text);
+    if (url.trim() !== '') {
+        formData.append('url', url);
+    } else {
+        formData.append('text', text);
+    }
     formData.append('colormap', colormapSelect.value);
     formData.append('background_color', backgroundColorInput.value);
 
@@ -38,11 +45,14 @@ function generateWordCloud() {
             img.src = 'data:image/png;base64,' + data.wordcloud;
             document.getElementById('wordcloud-container').innerHTML = '';
             document.getElementById('wordcloud-container').appendChild(img);
+        } else if (data.error) {
+            document.getElementById('wordcloud-container').innerHTML = `<p class="text-danger">Error: ${data.error}</p>`;
         }
     });
 }
 
 textInput.addEventListener('input', generateWordCloud);
+urlInput.addEventListener('input', generateWordCloud);
 colormapSelect.addEventListener('change', generateWordCloud);
 backgroundColorInput.addEventListener('change', generateWordCloud);
 fontFileInput.addEventListener('change', generateWordCloud);

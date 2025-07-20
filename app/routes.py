@@ -5,6 +5,8 @@ Defines the routes for the application.
 from flask import render_template, request, jsonify, current_app
 import os
 import tempfile
+import requests
+from bs4 import BeautifulSoup
 from .wordcloud_generator import generate_wordcloud_image
 
 @current_app.route('/')
@@ -19,12 +21,29 @@ def generate_wordcloud_route():
     """
     Generates a word cloud from the provided text.
     """
-    text = request.form.get('text')
+    text_input = request.form.get('text')
+    url_input = request.form.get('url')
     colormap = request.form.get('colormap', 'viridis')
     background_color = request.form.get('background_color', 'white')
     font_file = request.files.get('font_file')
     custom_stopwords = request.form.get('custom_stopwords')
     mask_file = request.files.get('mask_file')
+
+    text = ""
+    if url_input:
+        try:
+            response = requests.get(url_input)
+            response.raise_for_status()  # Raise an exception for HTTP errors
+            soup = BeautifulSoup(response.text, 'html.parser')
+            text = soup.get_text()
+        except requests.exceptions.RequestException as e:
+            current_app.logger.error(f"Error fetching URL {url_input}: {e}")
+            return jsonify({'error': f'Failed to fetch content from URL: {e}'}), 400
+        except Exception as e:
+            current_app.logger.error(f"Error parsing URL content {url_input}: {e}")
+            return jsonify({'error': 'Failed to parse content from URL.'}), 400
+    elif text_input:
+        text = text_input
 
     font_path = None
     if font_file and font_file.filename != '':
