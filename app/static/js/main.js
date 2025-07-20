@@ -3,6 +3,7 @@ const colormapSelect = document.getElementById('colormap-select');
 const backgroundColorInput = document.getElementById('background-color-input');
 const fontFileInput = document.getElementById('font-file-input');
 const stopwordsInput = document.getElementById('stopwords-input');
+const maskFileInput = document.getElementById('mask-file-input');
 
 function generateWordCloud() {
     const text = textInput.value;
@@ -20,6 +21,10 @@ function generateWordCloud() {
         formData.append('font_file', fontFileInput.files[0]);
     }
     formData.append('custom_stopwords', stopwordsInput.value);
+
+    if (maskFileInput.files.length > 0) {
+        formData.append('mask_file', maskFileInput.files[0]);
+    }
 
     fetch('/generate_wordcloud', {
         method: 'POST',
@@ -42,3 +47,4 @@ colormapSelect.addEventListener('change', generateWordCloud);
 backgroundColorInput.addEventListener('change', generateWordCloud);
 fontFileInput.addEventListener('change', generateWordCloud);
 stopwordsInput.addEventListener('input', generateWordCloud);
+maskFileInput.addEventListener('change', generateWordCloud);

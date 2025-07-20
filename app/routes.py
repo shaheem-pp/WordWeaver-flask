@@ -24,6 +24,7 @@ def generate_wordcloud_route():
     background_color = request.form.get('background_color', 'white')
     font_file = request.files.get('font_file')
     custom_stopwords = request.form.get('custom_stopwords')
+    mask_file = request.files.get('mask_file')
 
     font_path = None
     if font_file and font_file.filename != '':
@@ -36,19 +37,34 @@ def generate_wordcloud_route():
             current_app.logger.error(f"Error saving font file: {e}")
             return jsonify({'error': 'Failed to process font file.'}), 500
 
+    mask_path = None
+    if mask_file and mask_file.filename != '':
+        # Save the uploaded mask file temporarily
+        try:
+            with tempfile.NamedTemporaryFile(delete=False, suffix='.png') as temp_mask: # Assuming PNG for now, can be more flexible
+                mask_file.save(temp_mask.name)
+                mask_path = temp_mask.name
+        except Exception as e:
+            current_app.logger.error(f"Error saving mask file: {e}")
+            return jsonify({'error': 'Failed to process mask file.'}), 500
+
     if not text:
-        # Clean up temporary font file if it was uploaded
+        # Clean up temporary files if they were uploaded
         if font_path and os.path.exists(font_path):
             os.remove(font_path)
+        if mask_path and os.path.exists(mask_path):
+            os.remove(mask_path)
         return jsonify({'error': 'No text provided'}), 400
 
     try:
-        img_str = generate_wordcloud_image(text, colormap=colormap, background_color=background_color, font_path=font_path, custom_stopwords=custom_stopwords)
+        img_str = generate_wordcloud_image(text, colormap=colormap, background_color=background_color, font_path=font_path, custom_stopwords=custom_stopwords, mask_path=mask_path)
         return jsonify({'wordcloud': img_str})
     except Exception as e:
         current_app.logger.error(f"Error generating word cloud: {e}")
         return jsonify({'error': 'An unexpected error occurred.'}), 500
     finally:
-        # Clean up temporary font file
+        # Clean up temporary files
         if font_path and os.path.exists(font_path):
             os.remove(font_path)
+        if mask_path and os.path.exists(mask_path):
+            os.remove(mask_path)
