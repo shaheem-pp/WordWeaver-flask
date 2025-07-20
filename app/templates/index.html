@@ -38,7 +38,17 @@
                 <input type="file" id="font-file-input" class="form-control" accept=".ttf">
             </div>
             <div class="mt-3">
-                <label for="stopwords-input" class="form-label">Custom Stop Words (comma-separated)</label>
+                <label for="language-select" class="form-label">Default Stop Words Language</label>
+                <select id="language-select" class="form-select">
+                    <option value="none">None</option>
+                    <option value="english">English</option>
+                    <option value="french">French</option>
+                    <option value="german">German</option>
+                    <option value="spanish">Spanish</option>
+                </select>
+            </div>
+            <div class="mt-3">
+                <label for="stopwords-input" class="form-label">Additional Stop Words (comma-separated)</label>
                 <textarea id="stopwords-input" class="form-control" placeholder="e.g., word1, word2, word3"></textarea>
             </div>
             <div class="mt-3">
@@ -51,7 +61,7 @@
                 <!-- Word cloud will be displayed here -->
             </div>
             <div class="mt-3 text-center">
-                <a id="download-wordcloud" class="btn btn-primary" style="display: none;" download="wordcloud.png">Download Word Cloud</a>
+                <a id="download-wordcloud" class="btn btn-primary d-block w-100" style="display: none;" download="wordcloud.png">Download Word Cloud</a>
             </div>
         </div>
     </div>

@@ -18,6 +18,9 @@ body, html {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    /* Make left pane scrollable */
+    height: 100vh;
+    overflow-y: auto;
 }
 
 .right-pane {
@@ -31,17 +34,20 @@ body, html {
 
 #text-input {
     width: 100%;
-    height: 300px;
+    max-height: 300px; /* Set a max-height */
+    overflow-y: auto; /* Enable vertical scrolling */
     border-radius: 8px;
     border: 1px solid #ced4da;
     padding: 15px;
     font-size: 1rem;
-    resize: none;
+    resize: vertical; /* Allow vertical resizing */
+    word-wrap: break-word; /* Ensure long words break */
+    white-space: pre-wrap; /* Preserve whitespace and wrap text */
 }
 
 #wordcloud-container {
     width: 100%;
-    height: 100%;
+    height: 70vh;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -58,4 +64,86 @@ h1 {
     color: #333;
     text-align: center;
     margin-bottom: 2rem;
+}
+
+@media (max-width: 900px) {
+  .split-container {
+    flex-direction: column;
+    height: auto;
+  }
+  .left-pane, .right-pane {
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+  #wordcloud-container {
+    height: 40vh;
+  }
+}
+
+@media (max-width: 768px) {
+  .split-container {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .left-pane, .right-pane {
+    width: 100%;
+    height: auto;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+
+  .left-pane {
+    height: auto;
+    overflow-y: visible;
+  }
+
+  #wordcloud-container {
+    height: 50vh;
+    min-height: 300px;
+  }
+}
+
+@media (max-width: 600px) {
+  .left-pane, .right-pane {
+    padding: 10px;
+  }
+  #text-input {
+    font-size: 0.95rem;
+    padding: 10px;
+  }
+  h1 {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .left-pane, .right-pane {
+    padding: 15px;
+  }
+
+  h1 {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .form-label {
+    font-size: 0.9rem;
+  }
+
+  .form-control, .form-select {
+    padding: 10px;
+    font-size: 0.9rem;
+  }
+
+  #text-input {
+    min-height: 150px;
+  }
+
+  #wordcloud-container {
+    height: 40vh;
+  }
 }

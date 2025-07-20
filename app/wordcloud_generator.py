@@ -2,7 +2,7 @@
 This module contains the logic for generating word clouds.
 """
 
-from wordcloud import WordCloud, STOPWORDS
+from wordcloud import WordCloud, STOPWORDS, ImageColorGenerator
 import numpy as np
 from PIL import Image
 import base64
@@ -28,18 +28,25 @@ def generate_wordcloud_image(text, colormap='viridis', background_color='white',
         stopwords.update([word.strip() for word in custom_stopwords.split(',')])
 
     mask = None
+    mask_img = None
     if mask_path:
-        mask = np.array(Image.open(mask_path))
+        mask_img = Image.open(mask_path).convert('RGB')
+        mask = np.array(mask_img)
 
     wordcloud = WordCloud(
         width=800,
         height=400,
         background_color=background_color,
-        colormap=colormap,
+        colormap=colormap if not mask_img else None,  # Use colormap only if no mask image
         font_path=font_path,
         stopwords=stopwords,
         mask=mask
     ).generate(text)
+
+    # If mask image is provided, use its colors
+    if mask_img is not None:
+        image_colors = ImageColorGenerator(np.array(mask_img))
+        wordcloud = wordcloud.recolor(color_func=image_colors)
 
     img_buffer = BytesIO()
     wordcloud.to_image().save(img_buffer, format='PNG')
