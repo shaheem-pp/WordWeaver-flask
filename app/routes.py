@@ -23,6 +23,7 @@ def generate_wordcloud_route():
     colormap = request.form.get('colormap', 'viridis')
     background_color = request.form.get('background_color', 'white')
     font_file = request.files.get('font_file')
+    custom_stopwords = request.form.get('custom_stopwords')
 
     font_path = None
     if font_file and font_file.filename != '':
@@ -42,7 +43,7 @@ def generate_wordcloud_route():
         return jsonify({'error': 'No text provided'}), 400
 
     try:
-        img_str = generate_wordcloud_image(text, colormap=colormap, background_color=background_color, font_path=font_path)
+        img_str = generate_wordcloud_image(text, colormap=colormap, background_color=background_color, font_path=font_path, custom_stopwords=custom_stopwords)
         return jsonify({'wordcloud': img_str})
     except Exception as e:
         current_app.logger.error(f"Error generating word cloud: {e}")
