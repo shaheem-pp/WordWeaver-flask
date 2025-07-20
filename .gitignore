@@ -1,25 +1,54 @@
-# Python build artifacts and cache
-__pycache__/
+# Byte-code files
 *.pyc
-*.pyo
-*.pyd
+__pycache__/
+
+# Distribution / packaging
+.Python
 build/
 dist/
 *.egg-info/
+*.egg
 
 # Virtual environment
 venv/
 .env
 
-# IDEs
+# IDEs and editors
 .idea/
 .vscode/
+*.sublime-project
+*.sublime-workspace
 
-# macOS
+# OS generated files
 .DS_Store
+.Trashes
+ehthumbs.db
+Thumbs.db
 
-# Logs
+# Logs and databases
 *.log
+*.sqlite3
+*.db
 
-# Flask
+# Flask specific
 instance/
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# MyPy
+.mypy_cache/
+
+# Pytest
+.pytest_cache/
+
+# Other
+*.bak
+*.swp
+*~
+.DS_Store
