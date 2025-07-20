@@ -1,6 +1,7 @@
 const textInput = document.getElementById('text-input');
 const colormapSelect = document.getElementById('colormap-select');
 const backgroundColorInput = document.getElementById('background-color-input');
+const fontFileInput = document.getElementById('font-file-input');
 
 function generateWordCloud() {
     const text = textInput.value;
@@ -9,19 +10,18 @@ function generateWordCloud() {
         return;
     }
 
-    const colormap = colormapSelect.value;
-    const backgroundColor = backgroundColorInput.value;
+    const formData = new FormData();
+    formData.append('text', text);
+    formData.append('colormap', colormapSelect.value);
+    formData.append('background_color', backgroundColorInput.value);
+
+    if (fontFileInput.files.length > 0) {
+        formData.append('font_file', fontFileInput.files[0]);
+    }
 
     fetch('/generate_wordcloud', {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ 
-            text: text,
-            colormap: colormap,
-            background_color: backgroundColor
-        })
+        body: formData
     })
     .then(response => response.json())
     .then(data => {
@@ -38,3 +38,4 @@ function generateWordCloud() {
 textInput.addEventListener('input', generateWordCloud);
 colormapSelect.addEventListener('change', generateWordCloud);
 backgroundColorInput.addEventListener('change', generateWordCloud);
+fontFileInput.addEventListener('change', generateWordCloud);
