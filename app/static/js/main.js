@@ -1,16 +1,27 @@
-document.getElementById('text-input').addEventListener('input', function() {
-    const text = this.value;
+const textInput = document.getElementById('text-input');
+const colormapSelect = document.getElementById('colormap-select');
+const backgroundColorInput = document.getElementById('background-color-input');
+
+function generateWordCloud() {
+    const text = textInput.value;
     if (text.trim() === '') {
         document.getElementById('wordcloud-container').innerHTML = '';
         return;
     }
+
+    const colormap = colormapSelect.value;
+    const backgroundColor = backgroundColorInput.value;
 
     fetch('/generate_wordcloud', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ text: text })
+        body: JSON.stringify({ 
+            text: text,
+            colormap: colormap,
+            background_color: backgroundColor
+        })
     })
     .then(response => response.json())
     .then(data => {
@@ -22,4 +33,8 @@ document.getElementById('text-input').addEventListener('input', function() {
             document.getElementById('wordcloud-container').appendChild(img);
         }
     });
-});
+}
+
+textInput.addEventListener('input', generateWordCloud);
+colormapSelect.addEventListener('change', generateWordCloud);
+backgroundColorInput.addEventListener('change', generateWordCloud);

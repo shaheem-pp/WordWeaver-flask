@@ -18,11 +18,14 @@ def generate_wordcloud_route():
     Generates a word cloud from the provided text.
     """
     text = request.json.get('text')
+    colormap = request.json.get('colormap', 'viridis')
+    background_color = request.json.get('background_color', 'white')
+
     if not text:
         return jsonify({'error': 'No text provided'}), 400
 
     try:
-        img_str = generate_wordcloud_image(text)
+        img_str = generate_wordcloud_image(text, colormap=colormap, background_color=background_color)
         return jsonify({'wordcloud': img_str})
     except Exception as e:
         current_app.logger.error(f"Error generating word cloud: {e}")

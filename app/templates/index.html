@@ -12,6 +12,20 @@
         <div class="left-pane">
             <h1>WordWeaver</h1>
             <textarea id="text-input" class="form-control" placeholder="Paste your text here..."></textarea>
+            <div class="mt-3">
+                <label for="colormap-select" class="form-label">Color Map</label>
+                <select id="colormap-select" class="form-select">
+                    <option value="viridis">Viridis</option>
+                    <option value="plasma">Plasma</option>
+                    <option value="inferno">Inferno</option>
+                    <option value="magma">Magma</option>
+                    <option value="cividis">Cividis</option>
+                </select>
+            </div>
+            <div class="mt-3">
+                <label for="background-color-input" class="form-label">Background Color</label>
+                <input type="color" id="background-color-input" class="form-control form-control-color" value="#ffffff">
+            </div>
         </div>
         <div class="right-pane">
             <div id="wordcloud-container">

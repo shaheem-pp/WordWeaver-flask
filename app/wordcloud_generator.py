@@ -6,12 +6,14 @@ from wordcloud import WordCloud
 import base64
 from io import BytesIO
 
-def generate_wordcloud_image(text):
+def generate_wordcloud_image(text, colormap='viridis', background_color='white'):
     """
     Generates a word cloud image from the given text.
 
     Args:
         text (str): The text to generate the word cloud from.
+        colormap (str): The colormap for the word cloud.
+        background_color (str): The background color of the word cloud.
 
     Returns:
         str: A base64 encoded string representing the word cloud image.
@@ -19,8 +21,8 @@ def generate_wordcloud_image(text):
     wordcloud = WordCloud(
         width=800,
         height=400,
-        background_color='white',
-        colormap='viridis',
+        background_color=background_color,
+        colormap=colormap,
         font_path=None
     ).generate(text)
 
